@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace UniversityManager;
+namespace UniversityManager.Views;
 
 public partial class MainWindow : Window
 {
