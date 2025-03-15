@@ -10,8 +10,8 @@ public class SubjectRepo
 {
     private static readonly Lazy<SubjectRepo> _instance = new Lazy<SubjectRepo>(() => new SubjectRepo());
     private List<Subject> subjects;
-    private readonly string filePath = "Assets/Subjects.json";
-    
+    private readonly string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Subjects.json");
+
     // Private constructor (ensures only this class can instantiate itself)
     private SubjectRepo()
     {
@@ -20,21 +20,23 @@ public class SubjectRepo
 
     // Public accessor for Singleton instance
     public static SubjectRepo Instance => _instance.Value;
-    
+
     // Load from Json
     private void LoadSubjects()
     {
+        string directory = Path.GetDirectoryName(filePath);
+        if (!Directory.Exists(directory))
+            Directory.CreateDirectory(directory);
+
         if (File.Exists(filePath))
         {
             var json = File.ReadAllText(filePath);
-            
-            // Load subject list from json, if null create new list
             subjects = JsonConvert.DeserializeObject<List<Subject>>(json) ?? new List<Subject>();
         }
-
         else
         {
-            subjects = new List<Subject>();
+            subjects = new List<Subject>()
+            File.WriteAllText(filePath, "[]");
         }
     }
 

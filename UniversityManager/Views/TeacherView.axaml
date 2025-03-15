@@ -3,11 +3,150 @@
     d:DesignWidth="800"
     mc:Ignorable="d"
     x:Class="UniversityManager.Views.TeacherView"
-    x:DataType="vm:StudentViewModel"
+    x:DataType="vm:TeacherViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:UniversityManager.Models"
     xmlns:vm="clr-namespace:UniversityManager.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    Welcome to Avalonia!
+
+	<Grid RowDefinitions="Auto, *">
+		<!--  Header with teacher name  -->
+		<Border Background="#e74c3c" Grid.Row="0" Padding="20">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="Welcome, " />
+				<TextBlock
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="{Binding Name}" />
+			</StackPanel>
+		</Border>
+
+		<!--  Main content area  -->
+		<TabControl
+            Background="White"
+            Foreground="Black"
+            Grid.Row="1">
+			<TabItem Foreground="Black" Header="My Subjects">
+				<Grid
+                    Background="White"
+                    ColumnDefinitions="*,*"
+                    Margin="20"
+                    RowDefinitions="Auto, *">
+					<!--  Subjects List  -->
+					<ListBox
+                        Background="Transparent"
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        ItemsSource="{Binding MySubjects}"
+                        Margin="0,10,0,0"
+                        SelectedItem="{Binding SelectedSubject, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate x:DataType="models:Subject">
+								<Border
+                                    BorderBrush="#DDDDDD"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Margin="0,5"
+                                    Padding="10">
+									<TextBlock
+                                        FontWeight="SemiBold"
+                                        Text="{Binding Name}" />
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+
+					<!--  Subject Details Panel  -->
+					<Border
+                        Background="#F8F8F8"
+                        BorderBrush="#DDDDDD"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        IsVisible="{Binding SelectedSubject, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        Margin="10"
+                        Padding="15">
+						<StackPanel>
+							<TextBlock
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Margin="0,0,0,15"
+                                Text="{Binding SelectedSubject.Name}" />
+							<StackPanel
+                                Margin="0,0,0,10"
+                                Orientation="Horizontal">
+								<TextBlock
+                                    FontWeight="SemiBold"
+                                    Text="Subject ID: " />
+								<TextBlock
+                                    Text="{Binding SelectedSubject.Id}" />
+							</StackPanel>
+							<StackPanel
+                                Margin="0,0,0,10"
+                                Orientation="Vertical">
+								<TextBlock
+                                    FontWeight="SemiBold"
+                                    Text="Description:" />
+								<TextBlock
+                                    Margin="0,5,0,0"
+                                    Text="{Binding SelectedSubject.Description}"
+                                    TextWrapping="Wrap" />
+							</StackPanel>
+							<StackPanel
+                                Margin="0,10,0,0"
+                                Orientation="Vertical">
+								<TextBlock
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,0,10"
+                                    Text="Actions:" />
+								<Button
+                                    Classes="remove"
+                                    Command="{Binding DeleteSubjectCommand}"
+                                    Content="Delete Subject" />
+							</StackPanel>
+						</StackPanel>
+					</Border>
+				</Grid>
+			</TabItem>
+
+			<TabItem Header="Create New Subject">
+				<Grid
+                    Background="White"
+                    Margin="20"
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+					<TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Grid.Row="0"
+                        Text="Subject Name:" />
+					<TextBox
+                        Grid.Row="1"
+                        Text="{Binding NewSubjectName, Mode=TwoWay}"
+                        Margin="0,5,0,10" />
+					<TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Grid.Row="2"
+                        Text="Subject Description:" />
+					<TextBox
+                        Grid.Row="3"
+                        Text="{Binding NewSubjectDescription, Mode=TwoWay}"
+                        Margin="0,5,0,10"/>
+					<Button
+                        Grid.Row="4"
+                        Classes="add"
+                        Command="{Binding CreateSubjectCommand}"
+                        Content="Create Subject" />
+				</Grid>
+			</TabItem>
+		</TabControl>
+	</Grid>
 </UserControl>

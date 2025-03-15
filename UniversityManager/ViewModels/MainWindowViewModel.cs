@@ -21,7 +21,7 @@ public partial class MainWindowViewModel : BaseViewModel
     public MainWindowViewModel()
     {
         //Schimba asta in _teacherView ca sa incepi a lucra la teacher view
-        CurrentView = _studentView;
+        CurrentView = _teacherView;
 
       
 
