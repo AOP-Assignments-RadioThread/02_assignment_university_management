@@ -10,7 +10,7 @@ public class SubjectRepo
 {
     private static readonly Lazy<SubjectRepo> _instance = new Lazy<SubjectRepo>(() => new SubjectRepo());
     private List<Subject> subjects;
-    private readonly string filePath = "../Assets/Subjects.json";
+    private readonly string filePath = "Assets/Subjects.json";
     
     // Private constructor (ensures only this class can instantiate itself)
     private SubjectRepo()
@@ -38,7 +38,7 @@ public class SubjectRepo
         }
     }
 
-    private void SaveSubjects()
+    public void SaveSubjects()
     {
         var json = JsonConvert.SerializeObject(subjects);
         File.WriteAllText(filePath, json);
@@ -54,6 +54,11 @@ public class SubjectRepo
     {
         return subjects.Where(s => !s.StudentsEnrolled.Contains(studentId)).ToList();
     }
+
+    public Subject GetSubjectById(int subjectId)
+    {
+        return subjects.Find(s => s.Id == subjectId);
+    }
     
     // Get the subjects taught by teacher by id
     public List<Subject> GetSubjectsByTeacher(int teacherId)
@@ -64,13 +69,18 @@ public class SubjectRepo
     public void EnrollStudent(int studentId, int subjectId)
     {
         var subject = subjects.Find(s => s.Id == subjectId);
-        if (subject == null)
+        if (subject != null)
         {
             if (!subject.StudentsEnrolled.Contains(studentId))
             {
                 subject.StudentsEnrolled.Add(studentId);
             }
         }
+    }
+
+    public List<Subject> GetEnrolledSubjects(int studentId)
+    {
+        return subjects.Where(s => s.StudentsEnrolled.Contains(studentId)).ToList();
     }
 
     public void DropSubject(int studentId, int subjectId)

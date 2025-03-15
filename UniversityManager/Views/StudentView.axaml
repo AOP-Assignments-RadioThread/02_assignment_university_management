@@ -3,9 +3,272 @@
     d:DesignWidth="800"
     mc:Ignorable="d"
     x:Class="UniversityManager.Views.StudentView"
+    x:DataType="vm:StudentViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:UniversityManager.Models"
+    xmlns:vm="clr-namespace:UniversityManager.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    Welcome to Avalonia!
+
+
+    <Grid RowDefinitions="Auto, *">
+        <!--  Header with student name  -->
+
+        <Border
+            Background="#e74c3c"
+            Grid.Row="0"
+            Padding="20">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="Welcome, " />
+                <TextBlock
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="{Binding Name}" />
+            </StackPanel>
+        </Border>
+
+        <!--  Main content area  -->
+        <TabControl
+            Background="White"
+            Foreground="Black"
+            Grid.Row="1">
+            <TabItem Foreground="Black" Header="Enrolled Subjects">
+                <Grid
+                    Background="White"
+                    ColumnDefinitions="*,*"
+                    Margin="20"
+                    RowDefinitions="Auto, *">
+                    <!--  Enrolled Subjects Header  -->
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Margin="0,0,0,10"
+                        Text="Enrolled Subjects:" />
+
+                    <!--  Subject Details Header  -->
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="10,0,0,10"
+                        Text="Subject Details:" />
+
+                    <!--  Enrolled Subjects List  -->
+                    <ListBox
+                        Background="Transparent"
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        ItemsSource="{Binding EnrolledSubjects}"
+                        Margin="0,10,0,0"
+                        SelectedItem="{Binding EnrolledSelectedSubject, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:Subject">
+                                <Border
+                                    BorderBrush="#DDDDDD"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Margin="0,5"
+                                    Padding="10">
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!--  Subject Details Panel  -->
+                    <Border
+                        Background="#F8F8F8"
+                        BorderBrush="#DDDDDD"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        IsVisible="{Binding EnrolledSelectedSubject, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        Margin="10"
+                        Padding="15">
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Margin="0,0,0,15"
+                                Text="{Binding EnrolledSelectedSubject.Name}" />
+
+                            <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+                                <TextBlock FontWeight="SemiBold" Text="Subject ID: " />
+                                <TextBlock Text="{Binding EnrolledSelectedSubject.Id}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,0,10" Orientation="Vertical">
+                                <TextBlock FontWeight="SemiBold" Text="Description:" />
+                                <TextBlock
+                                    Margin="0,5,0,0"
+                                    Text="{Binding EnrolledSelectedSubject.Description}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+                                <TextBlock FontWeight="SemiBold" Text="Teacher ID: " />
+                                <TextBlock Text="{Binding EnrolledSelectedSubject.TeacherId}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,10,0,0" Orientation="Vertical">
+                                <TextBlock
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,0,10"
+                                    Text="Actions:" />
+                                <Button
+                                    Classes="remove"
+                                    Command="{Binding DropSelectedSubjectCommand}"
+                                    Content="Drop Subject" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!--  Placeholder when no subject is selected  -->
+                    <Border
+                        Background="#F8F8F8"
+                        BorderBrush="#DDDDDD"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        IsVisible="{Binding EnrolledSelectedSubject, Converter={x:Static ObjectConverters.IsNull}}"
+                        Margin="10"
+                        Padding="15">
+                        <TextBlock
+                            FontSize="16"
+                            HorizontalAlignment="Center"
+                            Opacity="0.5"
+                            Text="Select a subject to view details"
+                            VerticalAlignment="Center" />
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Available Subjects">
+                <Grid
+                    Background="White"
+                    ColumnDefinitions="*,*"
+                    Margin="20"
+                    RowDefinitions="Auto, *">
+                    <!--  Available Subjects Header  -->
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Margin="0,0,0,10"
+                        Text="Available Subjects:" />
+
+                    <!--  Subject Details Header  -->
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Grid.Column="1"
+                        Grid.Row="0"
+                        Margin="10,0,0,10"
+                        Text="Subject Details:" />
+
+                    <!--  Available Subjects List  -->
+                    <ListBox
+                        Background="Transparent"
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        ItemsSource="{Binding AvailableSubjects}"
+                        Margin="0,10,0,0"
+                        SelectedItem="{Binding AvailableSelectedSubject, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:Subject">
+                                <Border
+                                    BorderBrush="#DDDDDD"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Margin="0,5"
+                                    Padding="10">
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!--  Subject Details Panel  -->
+                    <Border
+                        Background="#F8F8F8"
+                        BorderBrush="#DDDDDD"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        IsVisible="{Binding AvailableSelectedSubject, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        Margin="10"
+                        Padding="15">
+                        <StackPanel>
+                            <TextBlock
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Margin="0,0,0,15"
+                                Text="{Binding AvailableSelectedSubject.Name}" />
+
+                            <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+                                <TextBlock FontWeight="SemiBold" Text="Subject ID: " />
+                                <TextBlock Text="{Binding AvailableSelectedSubject.Id}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,0,10" Orientation="Vertical">
+                                <TextBlock FontWeight="SemiBold" Text="Description:" />
+                                <TextBlock
+                                    Margin="0,5,0,0"
+                                    Text="{Binding AvailableSelectedSubject.Description}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+                                <TextBlock FontWeight="SemiBold" Text="Teacher ID: " />
+                                <TextBlock Text="{Binding AvailableSelectedSubject.TeacherId}" />
+                            </StackPanel>
+
+                            <StackPanel Margin="0,10,0,0" Orientation="Vertical">
+                                <TextBlock
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,0,10"
+                                    Text="Actions:" />
+                                <Button
+                                    Classes="add"
+                                    Command="{Binding EnrollInSelectedSubjectCommand}"
+                                    Content="Enroll in Subject" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!--  Placeholder when no subject is selected  -->
+                    <Border
+                        Background="#F8F8F8"
+                        BorderBrush="#DDDDDD"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        IsVisible="{Binding AvailableSelectedSubject, Converter={x:Static ObjectConverters.IsNull}}"
+                        Margin="10"
+                        Padding="15">
+                        <TextBlock
+                            FontSize="16"
+                            HorizontalAlignment="Center"
+                            Opacity="0.5"
+                            Text="Select a subject to view details"
+                            VerticalAlignment="Center" />
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>

@@ -1,6 +1,9 @@
 namespace UniversityManager.ViewModels;
 
-public class TeacherViewModel : BaseViewModel
+public partial class TeacherViewModel : BaseViewModel
 {
-    
+    public TeacherViewModel()
+    {
+        
+    }
 }

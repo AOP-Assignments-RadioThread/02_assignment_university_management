@@ -19,4 +19,9 @@ public class Subject
         Description = description;
         TeacherId = teacherId;
     }
+
+    public override string ToString()
+    {
+        return $"Name: {Name}, Description: {Description}, TeacherId: {TeacherId}, StudentsEnrolled: {StudentsEnrolled}, SubjectId: {Id}";
+    }
 }
