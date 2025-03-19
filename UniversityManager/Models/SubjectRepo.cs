@@ -10,11 +10,12 @@ public class SubjectRepo
 {
     private static readonly Lazy<SubjectRepo> _instance = new Lazy<SubjectRepo>(() => new SubjectRepo());
     private List<Subject> subjects;
-    private readonly string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Subjects.json");
+    public static string filePath = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName, "Assets", "Subjects.json");
 
     // Private constructor (ensures only this class can instantiate itself)
     private SubjectRepo()
     {
+        Console.WriteLine(filePath);
         LoadSubjects();
     }
 
@@ -25,6 +26,7 @@ public class SubjectRepo
     private void LoadSubjects()
     {
         string directory = Path.GetDirectoryName(filePath);
+        
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
 
@@ -35,7 +37,7 @@ public class SubjectRepo
         }
         else
         {
-            subjects = new List<Subject>()
+            subjects = new List<Subject>();
             File.WriteAllText(filePath, "[]");
         }
     }

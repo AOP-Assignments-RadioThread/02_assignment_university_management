@@ -33,8 +33,6 @@ public partial class StudentViewModel : BaseViewModel
     {
         Name = "Student";
         
-        
-        
         EnrolledSubjects = new ObservableCollection<Subject>(subjectRepo.GetEnrolledSubjects(_studentId));
         AvailableSubjects = new ObservableCollection<Subject>(subjectRepo.GetAvailableSubjects(_studentId));
     }
