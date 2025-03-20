@@ -11,26 +11,52 @@
     xmlns:vm="clr-namespace:UniversityManager.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <UserControl.Styles>
+        <Style Selector="Button.logout">
+            <Setter Property="Background" Value="#c0392b"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.logout:pointerover">
+            <Setter Property="Background" Value="#a93226"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.logout:pressed">
+            <Setter Property="Background" Value="#922b21"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </UserControl.Styles>
+
 
     <Grid RowDefinitions="Auto, *">
-        <!--  Header with student name  -->
-
+        <!--  Header with student name and logout button  -->
         <Border
             Background="#e74c3c"
             Grid.Row="0"
             Padding="20">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    FontSize="20"
-                    FontWeight="Bold"
-                    Foreground="White"
-                    Text="Welcome, " />
-                <TextBlock
-                    FontSize="20"
-                    FontWeight="Bold"
-                    Foreground="White"
-                    Text="{Binding Name}" />
-            </StackPanel>
+            <Grid ColumnDefinitions="*, Auto">
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <TextBlock
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Welcome, " />
+                    <TextBlock
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding Name}" />
+                </StackPanel>
+                
+                <Button 
+                    Grid.Column="1"
+                    Classes="logout"
+                    Command="{Binding LogoutCommand}"
+                    Content="Logout"/>
+            </Grid>
         </Border>
 
         <!--  Main content area  -->

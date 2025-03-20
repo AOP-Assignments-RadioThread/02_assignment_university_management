@@ -27,11 +27,14 @@ public partial class MainWindowViewModel : BaseViewModel
         _logInView = new LogInViewModel();
         _teacherView = new TeacherViewModel();
         
-        // Subscribe to login successful event
         // Basically pass the user from the LogInViewModel through an Event
         _logInView.LoginSuccessful += OnLoginSuccessful;
         
-        // Start with login view
+        // Same thing but doesn't pass anything
+        // OnLogoutRequested Runs when .LogoutRequested does
+        _teacherView.LogoutRequested += OnLogoutRequested;
+        _studentView.LogoutRequested += OnLogoutRequested;
+        
         CurrentView = _logInView;
     }
 
@@ -52,8 +55,9 @@ public partial class MainWindowViewModel : BaseViewModel
         }
         
     }
-    
-    
-    
-    
+    private void OnLogoutRequested()
+    {
+        CurrentUser = null;
+        CurrentView = _logInView;
+    }
 }

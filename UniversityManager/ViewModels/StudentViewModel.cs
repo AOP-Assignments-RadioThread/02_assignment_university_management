@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -23,10 +24,11 @@ public partial class StudentViewModel : BaseViewModel
     
     [ObservableProperty]
     private Subject? _availableSelectedSubject;
-    
+
     private SubjectRepo subjectRepo = SubjectRepo.Instance;
+    public event Action LogoutRequested;
+
     
-    // Student ID - in a real app this would come from authentication
     [ObservableProperty]
     private int _studentId;
 
@@ -79,6 +81,8 @@ public partial class StudentViewModel : BaseViewModel
     
     private void RefreshSubjects()
     {
+        //This is to ensure UI displays everything properly
+        
         // Get enrolled subjects for this student
         var enrolled = subjectRepo.GetEnrolledSubjects(_studentId);
         EnrolledSubjects = new ObservableCollection<Subject>(enrolled);
@@ -114,5 +118,12 @@ public partial class StudentViewModel : BaseViewModel
             AvailableSelectedSubject = null;
             AvailableSelectedSubject = temp;
         }
+    }
+    
+    [RelayCommand]
+    public void Logout()
+    {
+        // Notify that logout was requested
+        LogoutRequested?.Invoke();
     }
 }

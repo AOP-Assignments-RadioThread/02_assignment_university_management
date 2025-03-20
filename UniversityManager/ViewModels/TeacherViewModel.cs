@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -29,6 +30,9 @@ public partial class TeacherViewModel : BaseViewModel
 
     [ObservableProperty]
     private string _newSubjectDescription;
+    
+    public event Action LogoutRequested;
+
 
     public TeacherViewModel()
     {
@@ -81,6 +85,12 @@ public partial class TeacherViewModel : BaseViewModel
         }
     }
 
+    [RelayCommand]
+    public void Logout()
+    {
+        // Notify that logout was requested
+        LogoutRequested?.Invoke();
+    }
     public void Initialize(string name, int id)
     {
         Name = name;

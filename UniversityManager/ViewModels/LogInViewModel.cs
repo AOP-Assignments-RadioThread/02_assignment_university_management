@@ -51,6 +51,8 @@ public partial class LogInViewModel : BaseViewModel
         if (user != null)
         {
             LoginSuccessful?.Invoke(user);
+            UserName = string.Empty;
+            Password = string.Empty;
         }
         else
         {
