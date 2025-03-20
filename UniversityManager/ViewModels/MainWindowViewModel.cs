@@ -17,11 +17,12 @@ public partial class MainWindowViewModel : BaseViewModel
 
     private readonly StudentViewModel _studentView = new StudentViewModel();
     private readonly TeacherViewModel _teacherView = new TeacherViewModel();
+    private readonly LogInViewModel _logInView = new LogInViewModel();
 
     public MainWindowViewModel()
     {
         //Schimba asta in _teacherView ca sa incepi a lucra la teacher view
-        CurrentView = _teacherView;
+        CurrentView = _logInView;
 
 
 
