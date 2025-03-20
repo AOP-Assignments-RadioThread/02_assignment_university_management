@@ -27,6 +27,7 @@
         <DependentUpon>MainWindow.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Remove="UniversityManager.Tests\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -38,5 +39,22 @@
       <Resource Include="Assets\Subjects.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+      <None Remove="UniversityManager.Tests\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaXaml Remove="UniversityManager.Tests\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="UniversityManager.Tests\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Remove="UniversityManager.Tests\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaResource Remove="UniversityManager.Tests\**" />
     </ItemGroup>
 </Project>

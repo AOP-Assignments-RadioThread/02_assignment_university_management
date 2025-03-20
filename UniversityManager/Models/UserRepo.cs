@@ -6,32 +6,35 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-public class UserRepo
+public class UserRepo : IUserRepository
 {
-    private static readonly Lazy<UserRepo> _instance = new Lazy<UserRepo>(() => new UserRepo());
     private List<User> users;
-    public static string filePath = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName, "Assets", "Users.json");
+    private readonly string _filePath;
 
-    // Private constructor
-    private UserRepo()
+    public UserRepo(string filePath)
     {
+        _filePath = filePath;
         LoadUsers();
     }
 
-    // Public accessor for Singleton instance
-    public static UserRepo Instance => _instance.Value;
+    // Production constructor
+    public UserRepo() : this(Path.Combine(
+        Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName, 
+        "Assets", 
+        "Users.json"))
+    {
+    }
 
-    // Load from Json
     private void LoadUsers()
     {
-        string directory = Path.GetDirectoryName(filePath);
+        string directory = Path.GetDirectoryName(_filePath);
         
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
 
-        if (File.Exists(filePath))
+        if (File.Exists(_filePath))
         {
-            var json = File.ReadAllText(filePath);
+            var json = File.ReadAllText(_filePath);
             users = JsonConvert.DeserializeObject<List<User>>(json) ?? new List<User>();
         }
         else
@@ -48,7 +51,7 @@ public class UserRepo
     public void SaveUsers()
     {
         var json = JsonConvert.SerializeObject(users);
-        File.WriteAllText(filePath, json);
+        File.WriteAllText(_filePath, json);
     }
     
     public List<User> GetAllUsers()
@@ -70,10 +73,6 @@ public class UserRepo
 
     public void AddUser(User newUser)
     {
-        if (GetUserByUsername(newUser.Username) == null)
-        {
-            users.Add(newUser);
-            SaveUsers();
-        }
+        users.Add(newUser);
     }
 }

@@ -6,46 +6,48 @@ using Newtonsoft.Json;
 
 namespace UniversityManager.Models;
 
-public class SubjectRepo
+public class SubjectRepo : ISubjectRepository
 {
-    private static readonly Lazy<SubjectRepo> _instance = new Lazy<SubjectRepo>(() => new SubjectRepo());
     private List<Subject> subjects;
-    public static string filePath = Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName, "Assets", "Subjects.json");
+    private readonly string _filePath;
 
-    // Private constructor (ensures only this class can instantiate itself)
-    private SubjectRepo()
+    public SubjectRepo(string filePath)
     {
-        Console.WriteLine(filePath);
+        _filePath = filePath;
         LoadSubjects();
     }
 
-    // Public accessor for Singleton instance
-    public static SubjectRepo Instance => _instance.Value;
+    // Production constructor
+    public SubjectRepo() : this(Path.Combine(
+        Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.FullName, 
+        "Assets", 
+        "Subjects.json"))
+    {
+    }
 
-    // Load from Json
     private void LoadSubjects()
     {
-        string directory = Path.GetDirectoryName(filePath);
+        string directory = Path.GetDirectoryName(_filePath);
         
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
 
-        if (File.Exists(filePath))
+        if (File.Exists(_filePath))
         {
-            var json = File.ReadAllText(filePath);
+            var json = File.ReadAllText(_filePath);
             subjects = JsonConvert.DeserializeObject<List<Subject>>(json) ?? new List<Subject>();
         }
         else
         {
             subjects = new List<Subject>();
-            File.WriteAllText(filePath, "[]");
+            File.WriteAllText(_filePath, "[]");
         }
     }
 
     public void SaveSubjects()
     {
         var json = JsonConvert.SerializeObject(subjects);
-        File.WriteAllText(filePath, json);
+        File.WriteAllText(_filePath, json);
     }
     
     public List<Subject> GetAllSubjects()
@@ -53,7 +55,6 @@ public class SubjectRepo
         return subjects;
     }
 
-    // Get the available subjects for a student, the ones he is not already enrolled in
     public List<Subject> GetAvailableSubjects(int studentId)
     {
         return subjects.Where(s => !s.StudentsEnrolled.Contains(studentId)).ToList();
@@ -64,7 +65,6 @@ public class SubjectRepo
         return subjects.Find(s => s.Id == subjectId);
     }
     
-    // Get the subjects taught by teacher by id
     public List<Subject> GetSubjectsByTeacher(int teacherId)
     {
         return subjects.Where(s => s.TeacherId == teacherId).ToList();
@@ -112,5 +112,4 @@ public class SubjectRepo
             subjects.Remove(subject);
         }
     }
-    
 }

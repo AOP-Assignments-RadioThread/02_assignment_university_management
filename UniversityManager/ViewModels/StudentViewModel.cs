@@ -25,16 +25,15 @@ public partial class StudentViewModel : BaseViewModel
     [ObservableProperty]
     private Subject? _availableSelectedSubject;
 
-    private SubjectRepo subjectRepo = SubjectRepo.Instance;
+    private readonly ISubjectRepository _subjectRepo;
     public event Action LogoutRequested;
-
     
     [ObservableProperty]
     private int _studentId;
 
-    public StudentViewModel()
+    public StudentViewModel(ISubjectRepository subjectRepository)
     {
-        
+        _subjectRepo = subjectRepository;
     }
 
     [RelayCommand]
@@ -44,17 +43,14 @@ public partial class StudentViewModel : BaseViewModel
         {
             int subjectId = AvailableSelectedSubject.Id;
 
-            subjectRepo.EnrollStudent(_studentId, subjectId);
-            subjectRepo.SaveSubjects();
+            _subjectRepo.EnrollStudent(_studentId, subjectId);
+            _subjectRepo.SaveSubjects();
 
            RefreshSubjects();
 
             AvailableSelectedSubject = null;
-            
         }
     }
-
-   
 
     [RelayCommand]
     public void DropSelectedSubject()
@@ -63,8 +59,8 @@ public partial class StudentViewModel : BaseViewModel
         {
             int subjectId = EnrolledSelectedSubject.Id;
 
-            subjectRepo.DropSubject(_studentId, subjectId);
-            subjectRepo.SaveSubjects();
+            _subjectRepo.DropSubject(_studentId, subjectId);
+            _subjectRepo.SaveSubjects();
 
            RefreshSubjects();
 
@@ -81,10 +77,8 @@ public partial class StudentViewModel : BaseViewModel
     
     private void RefreshSubjects()
     {
-        //This is to ensure UI displays everything properly
-        
         // Get enrolled subjects for this student
-        var enrolled = subjectRepo.GetEnrolledSubjects(_studentId);
+        var enrolled = _subjectRepo.GetEnrolledSubjects(_studentId);
         EnrolledSubjects = new ObservableCollection<Subject>(enrolled);
         
         // First set to null to force property change
@@ -102,7 +96,7 @@ public partial class StudentViewModel : BaseViewModel
         }
 
         // Get available subjects for this student
-        var available = subjectRepo.GetAvailableSubjects(_studentId);
+        var available = _subjectRepo.GetAvailableSubjects(_studentId);
         AvailableSubjects = new ObservableCollection<Subject>(available);
         
         // First set to null to force property change

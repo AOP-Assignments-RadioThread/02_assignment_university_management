@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversityManager", "UniversityManager.csproj", "{D2AF48D5-39F1-4562-BB13-8EAB87DCB232}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversityManager.Tests", "UniversityManager.Tests\UniversityManager.Tests.csproj", "{964BC109-45A4-4E3E-BE96-ED3FBE42C267}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{D2AF48D5-39F1-4562-BB13-8EAB87DCB232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2AF48D5-39F1-4562-BB13-8EAB87DCB232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2AF48D5-39F1-4562-BB13-8EAB87DCB232}.Release|Any CPU.Build.0 = Release|Any CPU
+		{964BC109-45A4-4E3E-BE96-ED3FBE42C267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{964BC109-45A4-4E3E-BE96-ED3FBE42C267}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{964BC109-45A4-4E3E-BE96-ED3FBE42C267}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{964BC109-45A4-4E3E-BE96-ED3FBE42C267}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

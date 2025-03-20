@@ -7,8 +7,6 @@ namespace UniversityManager.ViewModels;
 
 public partial class MainWindowViewModel : BaseViewModel
 {
-    private SubjectRepo subjects;
-
     [ObservableProperty] 
     private BaseViewModel _currentView;
     
@@ -18,14 +16,18 @@ public partial class MainWindowViewModel : BaseViewModel
     [ObservableProperty]
     private Subject _selectedSubject;
 
-    private readonly StudentViewModel _studentView = new StudentViewModel();
-    private readonly TeacherViewModel _teacherView = new TeacherViewModel();
-    private readonly LogInViewModel _logInView = new LogInViewModel();
+    private readonly LogInViewModel _logInView;
+    private readonly StudentViewModel _studentView;
+    private readonly TeacherViewModel _teacherView;
 
-    public MainWindowViewModel()
+    public MainWindowViewModel(
+        LogInViewModel logInViewModel,
+        StudentViewModel studentViewModel,
+        TeacherViewModel teacherViewModel)
     {
-        _logInView = new LogInViewModel();
-        _teacherView = new TeacherViewModel();
+        _logInView = logInViewModel;
+        _studentView = studentViewModel;
+        _teacherView = teacherViewModel;
         
         // Basically pass the user from the LogInViewModel through an Event
         _logInView.LoginSuccessful += OnLoginSuccessful;
@@ -53,8 +55,8 @@ public partial class MainWindowViewModel : BaseViewModel
                 CurrentView = _teacherView;
                 break;
         }
-        
     }
+    
     private void OnLogoutRequested()
     {
         CurrentUser = null;

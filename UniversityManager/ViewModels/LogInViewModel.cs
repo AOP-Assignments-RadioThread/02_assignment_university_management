@@ -19,18 +19,13 @@ public partial class LogInViewModel : BaseViewModel
     [ObservableProperty]
     private string _errorMessage;
     
-    private UserRepo _userRepo;
-
-    private User _user;
+    private readonly IUserRepository _userRepo;
     
     public event Action<User> LoginSuccessful;
 
-    
-    
-
-    public LogInViewModel()
+    public LogInViewModel(IUserRepository userRepository)
     {
-        _userRepo = UserRepo.Instance;
+        _userRepo = userRepository;
     }
 
     [RelayCommand]
@@ -60,5 +55,4 @@ public partial class LogInViewModel : BaseViewModel
             IsLoginFailed = true;
         }
     }
-    
 }

@@ -10,8 +10,7 @@ namespace UniversityManager.ViewModels;
 
 public partial class TeacherViewModel : BaseViewModel
 {
-    
-    private readonly SubjectRepo _subjectRepo = SubjectRepo.Instance;
+    private readonly ISubjectRepository _subjectRepo;
     
     [ObservableProperty]
     private int _teacherId;
@@ -33,10 +32,10 @@ public partial class TeacherViewModel : BaseViewModel
     
     public event Action LogoutRequested;
 
-
-    public TeacherViewModel()
+    public TeacherViewModel(ISubjectRepository subjectRepository)
     {
-
+        _subjectRepo = subjectRepository;
+        MySubjects = new ObservableCollection<Subject>();
     }
 
     private void LoadSubjects()
@@ -64,10 +63,18 @@ public partial class TeacherViewModel : BaseViewModel
     {
         if (!string.IsNullOrWhiteSpace(NewSubjectName) && !string.IsNullOrWhiteSpace(NewSubjectDescription))
         {
-            var newSubject = new Subject(_subjectRepo.GetAllSubjects().Count + 1, NewSubjectName, NewSubjectDescription, _teacherId, new List<int>());
+            var newSubject = new Subject(
+                _subjectRepo.GetAllSubjects().Count + 1, 
+                NewSubjectName, 
+                NewSubjectDescription, 
+                _teacherId, 
+                new List<int>()
+            );
+            
             _subjectRepo.AddSubject(newSubject);
             _subjectRepo.SaveSubjects();
             LoadSubjects();
+            
             NewSubjectName = string.Empty;
             NewSubjectDescription = string.Empty;
         }
@@ -88,14 +95,13 @@ public partial class TeacherViewModel : BaseViewModel
     [RelayCommand]
     public void Logout()
     {
-        // Notify that logout was requested
         LogoutRequested?.Invoke();
     }
+    
     public void Initialize(string name, int id)
     {
         Name = name;
         TeacherId = id;
         LoadSubjects();
     }
-    
 }

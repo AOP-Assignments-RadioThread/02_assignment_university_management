@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using UniversityManager.Models;
 using UniversityManager.ViewModels;
 using UniversityManager.Views;
 
@@ -17,7 +18,26 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow(){DataContext = new MainWindowViewModel()};
+            // Create repositories
+            IUserRepository userRepository = new UserRepo();
+            ISubjectRepository subjectRepository = new SubjectRepo();
+            
+            // Create view models with DI
+            var loginViewModel = new LogInViewModel(userRepository);
+            var studentViewModel = new StudentViewModel(subjectRepository);
+            var teacherViewModel = new TeacherViewModel(subjectRepository);
+            
+            // Create main view model
+            var mainViewModel = new MainWindowViewModel(
+                loginViewModel,
+                studentViewModel,
+                teacherViewModel
+            );
+            
+            desktop.MainWindow = new MainWindow()
+            {
+                DataContext = mainViewModel
+            };
         }
 
         base.OnFrameworkInitializationCompleted();
