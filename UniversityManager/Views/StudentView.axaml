@@ -13,20 +13,20 @@
 
     <UserControl.Styles>
         <Style Selector="Button.logout">
-            <Setter Property="Background" Value="#c0392b"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Padding" Value="12,8"/>
-            <Setter Property="CornerRadius" Value="4"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#c0392b" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <Style Selector="Button.logout:pointerover">
-            <Setter Property="Background" Value="#a93226"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#a93226" />
+            <Setter Property="Foreground" Value="White" />
         </Style>
         <Style Selector="Button.logout:pressed">
-            <Setter Property="Background" Value="#922b21"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#922b21" />
+            <Setter Property="Foreground" Value="White" />
         </Style>
     </UserControl.Styles>
 
@@ -38,7 +38,7 @@
             Grid.Row="0"
             Padding="20">
             <Grid ColumnDefinitions="*, Auto">
-                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
                     <TextBlock
                         FontSize="20"
                         FontWeight="Bold"
@@ -50,12 +50,12 @@
                         Foreground="White"
                         Text="{Binding Name}" />
                 </StackPanel>
-                
-                <Button 
-                    Grid.Column="1"
+
+                <Button
                     Classes="logout"
                     Command="{Binding LogoutCommand}"
-                    Content="Logout"/>
+                    Content="Logout"
+                    Grid.Column="1" />
             </Grid>
         </Border>
 
@@ -79,14 +79,29 @@
                         Margin="0,0,0,10"
                         Text="Enrolled Subjects:" />
 
+
                     <!--  Subject Details Header  -->
-                    <TextBlock
-                        FontSize="16"
-                        FontWeight="Bold"
-                        Grid.Column="1"
-                        Grid.Row="0"
-                        Margin="10,0,0,10"
-                        Text="Subject Details:" />
+                    <StackPanel Grid.Column="1" Grid.Row="0">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Margin="10,0,0,10"
+                            Text="Subject Details:" />
+                        <Border
+                            Background="#4CAF50"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            IsVisible="{Binding ShowStatusMessage}"
+                            Margin="10"
+                            Padding="10"
+                            VerticalAlignment="Top">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Foreground="White"
+                                Text="{Binding StatusMessage}" />
+                        </Border>
+                    </StackPanel>
+
 
                     <!--  Enrolled Subjects List  -->
                     <ListBox
@@ -156,6 +171,7 @@
                                     Command="{Binding DropSelectedSubjectCommand}"
                                     Content="Drop Subject" />
                             </StackPanel>
+
                         </StackPanel>
                     </Border>
 
@@ -177,6 +193,7 @@
                             Text="Select a subject to view details"
                             VerticalAlignment="Center" />
                     </Border>
+
                 </Grid>
             </TabItem>
 
@@ -196,15 +213,33 @@
                         Text="Available Subjects:" />
 
                     <!--  Subject Details Header  -->
-                    <TextBlock
-                        FontSize="16"
-                        FontWeight="Bold"
-                        Grid.Column="1"
-                        Grid.Row="0"
-                        Margin="10,0,0,10"
-                        Text="Subject Details:" />
+                    <StackPanel Grid.Column="1" Grid.Row="0">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Margin="10,0,0,10"
+                            Text="Subject Details:" />
+                        <Border
+                            Background="#4CAF50"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            IsVisible="{Binding ShowStatusMessage}"
+                            Margin="10"
+                            Padding="10"
+                            VerticalAlignment="Top">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Foreground="White"
+                                Text="{Binding StatusMessage}" />
+                        </Border>
+                    </StackPanel>
+
 
                     <!--  Available Subjects List  -->
+
+
                     <ListBox
                         Background="Transparent"
                         Grid.Column="0"
@@ -227,6 +262,7 @@
                     </ListBox>
 
                     <!--  Subject Details Panel  -->
+
                     <Border
                         Background="#F8F8F8"
                         BorderBrush="#DDDDDD"
@@ -272,8 +308,10 @@
                                     Command="{Binding EnrollInSelectedSubjectCommand}"
                                     Content="Enroll in Subject" />
                             </StackPanel>
+
                         </StackPanel>
                     </Border>
+
 
                     <!--  Placeholder when no subject is selected  -->
                     <Border
@@ -293,6 +331,7 @@
                             Text="Select a subject to view details"
                             VerticalAlignment="Center" />
                     </Border>
+
                 </Grid>
             </TabItem>
         </TabControl>

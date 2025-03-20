@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UniversityManager.Models;
@@ -24,12 +25,20 @@ public partial class StudentViewModel : BaseViewModel
     
     [ObservableProperty]
     private Subject? _availableSelectedSubject;
+    
+    [ObservableProperty]
+    private int _studentId;
+    
+    [ObservableProperty]
+    private string _statusMessage = string.Empty;
+
+    [ObservableProperty]
+    private bool _showStatusMessage;
 
     private readonly ISubjectRepository _subjectRepo;
     public event Action LogoutRequested;
     
-    [ObservableProperty]
-    private int _studentId;
+    
 
     public StudentViewModel(ISubjectRepository subjectRepository)
     {
@@ -45,9 +54,12 @@ public partial class StudentViewModel : BaseViewModel
 
             _subjectRepo.EnrollStudent(_studentId, subjectId);
             _subjectRepo.SaveSubjects();
-
-           RefreshSubjects();
-
+            
+            StatusMessage = $"Successfully enrolled in {AvailableSelectedSubject.Name}!";
+            ShowStatusMessage = true;
+            HideStatusMessageAfterDelay();
+            
+            RefreshSubjects();
             AvailableSelectedSubject = null;
         }
     }
@@ -56,14 +68,17 @@ public partial class StudentViewModel : BaseViewModel
     public void DropSelectedSubject()
     {
         if (EnrolledSelectedSubject != null)
-        {
+        { 
             int subjectId = EnrolledSelectedSubject.Id;
-
+            
             _subjectRepo.DropSubject(_studentId, subjectId);
-            _subjectRepo.SaveSubjects();
-
-           RefreshSubjects();
-
+            _subjectRepo.SaveSubjects(); 
+            
+            StatusMessage = $"Successfully dropped {EnrolledSelectedSubject.Name}!";
+            ShowStatusMessage = true;
+            HideStatusMessageAfterDelay();
+            
+            RefreshSubjects(); 
             EnrolledSelectedSubject = null;
         }
     }
@@ -112,6 +127,14 @@ public partial class StudentViewModel : BaseViewModel
             AvailableSelectedSubject = null;
             AvailableSelectedSubject = temp;
         }
+    }
+    
+    private void HideStatusMessageAfterDelay()
+    {
+        Task.Delay(3000).ContinueWith(_ => 
+        {
+            ShowStatusMessage = false;
+        });
     }
     
     [RelayCommand]

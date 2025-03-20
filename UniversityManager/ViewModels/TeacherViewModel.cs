@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UniversityManager.Models;
@@ -10,54 +11,49 @@ namespace UniversityManager.ViewModels;
 
 public partial class TeacherViewModel : BaseViewModel
 {
-    private readonly ISubjectRepository _subjectRepo;
+    [ObservableProperty]
+    private string _name;
+    
+    [ObservableProperty]
+    private ObservableCollection<Subject> _mySubjects;
+    
+    [ObservableProperty]
+    private Subject _selectedSubject;
+    
+    [ObservableProperty]
+    private string _newSubjectName = string.Empty;
+    
+    [ObservableProperty]
+    private string _newSubjectDescription = string.Empty;
     
     [ObservableProperty]
     private int _teacherId;
-   
-    [ObservableProperty]
-    private string? _name;
-
-    [ObservableProperty]
-    private ObservableCollection<Subject> _mySubjects;
-
-    [ObservableProperty]
-    private Subject _selectedSubject;
-
-    [ObservableProperty]
-    private string _newSubjectName;
-
-    [ObservableProperty]
-    private string _newSubjectDescription;
     
+    [ObservableProperty]
+    private string _statusMessage = string.Empty;
+
+    [ObservableProperty]
+    private bool _showStatusMessage;
+    
+    private readonly ISubjectRepository _subjectRepo;
     public event Action LogoutRequested;
 
     public TeacherViewModel(ISubjectRepository subjectRepository)
     {
         _subjectRepo = subjectRepository;
-        MySubjects = new ObservableCollection<Subject>();
     }
-
+    
     private void LoadSubjects()
     {
-        var subjects = _subjectRepo.GetSubjectsByTeacher(TeacherId);
+        var subjects = _subjectRepo.GetSubjectsByTeacher(_teacherId);
         MySubjects = new ObservableCollection<Subject>(subjects);
         
-        // First set to null to force property change
-        SelectedSubject = null;
-        
-        // Then set to first subject if available
-        if (subjects.Any())
+        if (MySubjects.Count > 0 && SelectedSubject == null)
         {
-            SelectedSubject = subjects.First();
-            
-            // Force UI refresh by reassigning the same value
-            var temp = SelectedSubject;
-            SelectedSubject = null;
-            SelectedSubject = temp;
+            SelectedSubject = MySubjects[0];
         }
     }
-
+    
     [RelayCommand]
     public void CreateSubject()
     {
@@ -73,6 +69,12 @@ public partial class TeacherViewModel : BaseViewModel
             
             _subjectRepo.AddSubject(newSubject);
             _subjectRepo.SaveSubjects();
+            
+            // Show status message
+            StatusMessage = $"Subject '{NewSubjectName}' created successfully!";
+            ShowStatusMessage = true;
+            HideStatusMessageAfterDelay();
+            
             LoadSubjects();
             
             NewSubjectName = string.Empty;
@@ -85,11 +87,26 @@ public partial class TeacherViewModel : BaseViewModel
     {
         if (SelectedSubject != null)
         {
+            string subjectName = SelectedSubject.Name;
             _subjectRepo.RemoveSubject(SelectedSubject.Id);
             _subjectRepo.SaveSubjects();
+            
+            // Show status message
+            StatusMessage = $"Subject '{subjectName}' deleted successfully!";
+            ShowStatusMessage = true;
+            HideStatusMessageAfterDelay();
+            
             LoadSubjects();
             SelectedSubject = null;
         }
+    }
+    
+    private void HideStatusMessageAfterDelay()
+    {
+        Task.Delay(3000).ContinueWith(_ => 
+        {
+            ShowStatusMessage = false;
+        });
     }
 
     [RelayCommand]

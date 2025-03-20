@@ -11,169 +11,190 @@
     xmlns:vm="clr-namespace:UniversityManager.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-	<UserControl.Styles>
-		<Style Selector="Button.logout">
-			<Setter Property="Background" Value="#c0392b"/>
-			<Setter Property="Foreground" Value="White"/>
-			<Setter Property="Padding" Value="12,8"/>
-			<Setter Property="CornerRadius" Value="4"/>
-			<Setter Property="HorizontalContentAlignment" Value="Center"/>
-			<Setter Property="VerticalContentAlignment" Value="Center"/>
-		</Style>
-		<Style Selector="Button.logout:pointerover">
-			<Setter Property="Background" Value="#a93226"/>
-			<Setter Property="Foreground" Value="White"/>
-		</Style>
-		<Style Selector="Button.logout:pressed">
-			<Setter Property="Background" Value="#922b21"/>
-			<Setter Property="Foreground" Value="White"/>
-		</Style>
-	</UserControl.Styles>
+    <UserControl.Styles>
+        <Style Selector="Button.logout">
+            <Setter Property="Background" Value="#c0392b" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.logout:pointerover">
+            <Setter Property="Background" Value="#a93226" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style Selector="Button.logout:pressed">
+            <Setter Property="Background" Value="#922b21" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </UserControl.Styles>
 
-	<Grid RowDefinitions="Auto, *">
-		<!--  Header with teacher name and logout button  -->
-		<Border Background="#e74c3c" Grid.Row="0" Padding="20">
-			<Grid ColumnDefinitions="*, Auto">
-				<StackPanel Orientation="Horizontal" Grid.Column="0">
-					<TextBlock
-						FontSize="20"
-						FontWeight="Bold"
-						Foreground="White"
-						Text="Welcome, " />
-					<TextBlock
-						FontSize="20"
-						FontWeight="Bold"
-						Foreground="White"
-						Text="{Binding Name}" />
-				</StackPanel>
-				
-				<Button 
-					Grid.Column="1"
-					Classes="logout"
-					Command="{Binding LogoutCommand}"
-					Content="Logout"/>
-			</Grid>
-		</Border>
+    <Grid RowDefinitions="Auto, *">
+        <!--  Header with teacher name and logout button  -->
+        <Border
+            Background="#e74c3c"
+            Grid.Row="0"
+            Padding="20">
+            <Grid ColumnDefinitions="*, Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="Welcome, " />
+                    <TextBlock
+                        FontSize="20"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Text="{Binding Name}" />
+                </StackPanel>
 
-		<!--  Main content area  -->
-		<TabControl
+                <Button
+                    Classes="logout"
+                    Command="{Binding LogoutCommand}"
+                    Content="Logout"
+                    Grid.Column="1" />
+            </Grid>
+        </Border>
+
+        <!--  Main content area  -->
+        <TabControl
             Background="White"
             Foreground="Black"
             Grid.Row="1">
-			<TabItem Foreground="Black" Header="My Subjects">
-				<Grid
+            <TabItem Foreground="Black" Header="My Subjects">
+                <Grid
                     Background="White"
                     ColumnDefinitions="*,*"
                     Margin="20"
                     RowDefinitions="Auto, *">
-					<!--  Subjects List  -->
-					<ListBox
+                    <!--  Subjects List  -->
+
+                    <ListBox
                         Background="Transparent"
                         Grid.Column="0"
                         Grid.Row="1"
                         ItemsSource="{Binding MySubjects}"
                         Margin="0,10,0,0"
                         SelectedItem="{Binding SelectedSubject, Mode=TwoWay}">
-						<ListBox.ItemTemplate>
-							<DataTemplate x:DataType="models:Subject">
-								<Border
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="models:Subject">
+                                <Border
                                     BorderBrush="#DDDDDD"
                                     BorderThickness="1"
                                     CornerRadius="4"
                                     Margin="0,5"
                                     Padding="10">
-									<TextBlock
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!--  Subject Details Panel  -->
+                    <StackPanel Grid.Column="1 " Grid.Row="1">
+                        <Border
+                            Background="#4CAF50"
+                            CornerRadius="4"
+                            HorizontalAlignment="Center"
+                            IsVisible="{Binding ShowStatusMessage}"
+                            Margin="10"
+                            Padding="10"
+                            VerticalAlignment="Top">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Foreground="White"
+                                Text="{Binding StatusMessage}" />
+                        </Border>
+                        <Border
+                            Background="#F8F8F8"
+                            BorderBrush="#DDDDDD"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            IsVisible="{Binding SelectedSubject, Converter={x:Static ObjectConverters.IsNotNull}}"
+                            Margin="10"
+                            Padding="15">
+                            <StackPanel>
+                                <TextBlock
+                                    FontSize="20"
+                                    FontWeight="Bold"
+                                    Margin="0,0,0,15"
+                                    Text="{Binding SelectedSubject.Name}" />
+                                <StackPanel Margin="0,0,0,10" Orientation="Horizontal">
+                                    <TextBlock FontWeight="SemiBold" Text="Subject ID: " />
+                                    <TextBlock Text="{Binding SelectedSubject.Id}" />
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,10" Orientation="Vertical">
+                                    <TextBlock FontWeight="SemiBold" Text="Description:" />
+                                    <TextBlock
+                                        Margin="0,5,0,0"
+                                        Text="{Binding SelectedSubject.Description}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                                <StackPanel Margin="0,10,0,0" Orientation="Vertical">
+                                    <TextBlock
                                         FontWeight="SemiBold"
-                                        Text="{Binding Name}" />
-								</Border>
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
+                                        Margin="0,0,0,10"
+                                        Text="Actions:" />
+                                    <Button
+                                        Classes="remove"
+                                        Command="{Binding DeleteSubjectCommand}"
+                                        Content="Delete Subject" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+    
+                </Grid>
+            </TabItem>
 
-					<!--  Subject Details Panel  -->
-					<Border
-                        Background="#F8F8F8"
-                        BorderBrush="#DDDDDD"
-                        BorderThickness="1"
-                        CornerRadius="4"
-                        Grid.Column="1"
-                        Grid.Row="1"
-                        IsVisible="{Binding SelectedSubject, Converter={x:Static ObjectConverters.IsNotNull}}"
-                        Margin="10"
-                        Padding="15">
-						<StackPanel>
-							<TextBlock
-                                FontSize="20"
-                                FontWeight="Bold"
-                                Margin="0,0,0,15"
-                                Text="{Binding SelectedSubject.Name}" />
-							<StackPanel
-                                Margin="0,0,0,10"
-                                Orientation="Horizontal">
-								<TextBlock
-                                    FontWeight="SemiBold"
-                                    Text="Subject ID: " />
-								<TextBlock
-                                    Text="{Binding SelectedSubject.Id}" />
-							</StackPanel>
-							<StackPanel
-                                Margin="0,0,0,10"
-                                Orientation="Vertical">
-								<TextBlock
-                                    FontWeight="SemiBold"
-                                    Text="Description:" />
-								<TextBlock
-                                    Margin="0,5,0,0"
-                                    Text="{Binding SelectedSubject.Description}"
-                                    TextWrapping="Wrap" />
-							</StackPanel>
-							<StackPanel
-                                Margin="0,10,0,0"
-                                Orientation="Vertical">
-								<TextBlock
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,10"
-                                    Text="Actions:" />
-								<Button
-                                    Classes="remove"
-                                    Command="{Binding DeleteSubjectCommand}"
-                                    Content="Delete Subject" />
-							</StackPanel>
-						</StackPanel>
-					</Border>
-				</Grid>
-			</TabItem>
-
-			<TabItem Header="Create New Subject">
-				<Grid
+            <TabItem Header="Create New Subject">
+                <Grid
                     Background="White"
                     Margin="20"
-                    RowDefinitions="Auto, Auto, Auto, Auto, Auto">
-					<TextBlock
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
+                    <TextBlock
                         FontSize="16"
                         FontWeight="Bold"
                         Grid.Row="0"
                         Text="Subject Name:" />
-					<TextBox
+                    <TextBox
                         Grid.Row="1"
-                        Text="{Binding NewSubjectName, Mode=TwoWay}"
-                        Margin="0,5,0,10" />
-					<TextBlock
+                        Margin="0,5,0,10"
+                        Text="{Binding NewSubjectName, Mode=TwoWay}" />
+                    <TextBlock
                         FontSize="16"
                         FontWeight="Bold"
                         Grid.Row="2"
                         Text="Subject Description:" />
-					<TextBox
+                    <TextBox
                         Grid.Row="3"
-                        Text="{Binding NewSubjectDescription, Mode=TwoWay}"
-                        Margin="0,5,0,10"/>
-					<Button
-                        Grid.Row="4"
+                        Margin="0,5,0,10"
+                        Text="{Binding NewSubjectDescription, Mode=TwoWay}" />
+                    <Button
                         Classes="add"
                         Command="{Binding CreateSubjectCommand}"
-                        Content="Create Subject" />
-				</Grid>
-			</TabItem>
-		</TabControl>
-	</Grid>
+                        Content="Create Subject"
+                        Grid.Row="4" />
+                    <Border
+                        Background="#4CAF50"
+                        CornerRadius="4"
+                        Grid.Row="5"
+                        HorizontalAlignment="Center"
+                        IsVisible="{Binding ShowStatusMessage}"
+                        Margin="10"
+                        Padding="10"
+                        VerticalAlignment="Top">
+                        <TextBlock
+                            FontWeight="SemiBold"
+                            Foreground="White"
+                            Text="{Binding StatusMessage}" />
+                    </Border>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>
