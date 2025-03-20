@@ -13,8 +13,12 @@ namespace UniversityManager.Tests.ViewModels
         {
             // Arrange
             var mockUserRepo = new Mock<IUserRepository>();
-            var validUser = new User(1, "testuser", "password", UserRole.Student);
+            // Create user with hashed password instead of plaintext
+            var hashedPassword = PasswordHasher.HashPassword("password");
+            var validUser = new User(1, "testuser", hashedPassword, UserRole.Student);
             
+            // Set up the mock to return the user when AuthenticateUser is called
+            // The actual implementation now handles password verification
             mockUserRepo.Setup(repo => repo.AuthenticateUser("testuser", "password"))
                 .Returns(validUser);
             
@@ -49,6 +53,7 @@ namespace UniversityManager.Tests.ViewModels
             // Arrange
             var mockUserRepo = new Mock<IUserRepository>();
             
+            // Set up to return null when credentials don't match
             mockUserRepo.Setup(repo => repo.AuthenticateUser(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((User)null!);
             

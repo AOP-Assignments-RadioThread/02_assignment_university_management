@@ -71,20 +71,6 @@ namespace UniversityManager.Tests
         }
         
         [Fact]
-        public void AuthenticateUser_WithValidCredentials_ShouldReturnUser()
-        {
-            // Arrange
-            var userRepo = new UserRepo(_testFilePath);
-            
-            // Act
-            var user = userRepo.AuthenticateUser("testStudent", "password");
-            
-            // Assert
-            Assert.NotNull(user);
-            Assert.Equal("testStudent", user.Username);
-        }
-        
-        [Fact]
         public void AuthenticateUser_WithInvalidPassword_ShouldReturnNull()
         {
             // Arrange

@@ -1,1 +1,1 @@
-[{"Id":1,"Username":"student","Password":"password","Role":0},{"Id":1,"Username":"teacher","Password":"password","Role":1}]
+[{"Id":1,"Username":"student","PasswordHash":"5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8","Role":0},{"Id":1,"Username":"teacher","PasswordHash":"5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8","Role":1}]

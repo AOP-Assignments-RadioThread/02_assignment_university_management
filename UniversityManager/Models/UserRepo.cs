@@ -41,8 +41,8 @@ public class UserRepo : IUserRepository
         {
             users = new List<User>
             {
-                new User(1, "student", "password", UserRole.Student),
-                new User(2, "teacher", "password", UserRole.Teacher)
+                new User(1, "student", PasswordHasher.HashPassword("password"), UserRole.Student),
+                new User(1, "teacher", PasswordHasher.HashPassword("password"), UserRole.Teacher)
             };
             SaveUsers();
         }
@@ -66,9 +66,15 @@ public class UserRepo : IUserRepository
 
     public User AuthenticateUser(string username, string password)
     {
-        return users.FirstOrDefault(u => 
-            u.Username.Equals(username, StringComparison.OrdinalIgnoreCase) && 
-            u.Password == password);
+        var user = users.FirstOrDefault(u => 
+            u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+    
+        if (user != null && PasswordHasher.VerifyPassword(password, user.PasswordHash))
+        {
+            return user;
+        }
+    
+        return null;
     }
 
     public void AddUser(User newUser)
