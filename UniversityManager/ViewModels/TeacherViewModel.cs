@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using UniversityManager.Models;
@@ -10,7 +11,9 @@ public partial class TeacherViewModel : BaseViewModel
 {
     
     private readonly SubjectRepo _subjectRepo = SubjectRepo.Instance;
-    private int _teacherId = 1;
+    
+    [ObservableProperty]
+    private int _teacherId;
    
     [ObservableProperty]
     private string? _name;
@@ -29,14 +32,27 @@ public partial class TeacherViewModel : BaseViewModel
 
     public TeacherViewModel()
     {
-        Name = "Teacher";
 
-        LoadSubjects();
     }
 
     private void LoadSubjects()
     {
-        MySubjects = new ObservableCollection<Subject>(_subjectRepo.GetSubjectsByTeacher(_teacherId));
+        var subjects = _subjectRepo.GetSubjectsByTeacher(TeacherId);
+        MySubjects = new ObservableCollection<Subject>(subjects);
+        
+        // First set to null to force property change
+        SelectedSubject = null;
+        
+        // Then set to first subject if available
+        if (subjects.Any())
+        {
+            SelectedSubject = subjects.First();
+            
+            // Force UI refresh by reassigning the same value
+            var temp = SelectedSubject;
+            SelectedSubject = null;
+            SelectedSubject = temp;
+        }
     }
 
     [RelayCommand]
@@ -64,4 +80,12 @@ public partial class TeacherViewModel : BaseViewModel
             SelectedSubject = null;
         }
     }
+
+    public void Initialize(string name, int id)
+    {
+        Name = name;
+        TeacherId = id;
+        LoadSubjects();
+    }
+    
 }

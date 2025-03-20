@@ -9,39 +9,50 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:UniversityManager.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Border>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock
-                FontSize="50"
-                HorizontalAlignment="Center"
-                Margin="0,0,0,50"
-                Text="University Manager" />
+    <Design.DataContext>
+        <vm:LogInViewModel />
+    </Design.DataContext>
 
-            <Border
-                Background="Red"
-                CornerRadius="5"
-                Height="200"
+    <Grid Background="Red">
+        <Border
+            Background="White"
+            CornerRadius="30"
+            Height="400"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Width="350">
+            <StackPanel
                 HorizontalAlignment="Center"
+                Spacing="20"
                 VerticalAlignment="Center"
-                Width="400">
-                <StackPanel
-                    HorizontalAlignment="Center"
-                    Spacing="10"
-                    VerticalAlignment="Center">
-                    <TextBlock
-                        Foreground="White"
-                        Text="Username"
-                        Width="300" />
-                    <TextBox Text="{Binding UserName}" />
+                Width="300">
 
-                    <TextBlock
-                        Foreground="White"
-                        Text="Password"
-                        Width="300" />
-                    <TextBox Text="{Binding Password}" />
-                    <Button Content="Log In" HorizontalAlignment="Center" />
-                </StackPanel>
-            </Border>
-        </StackPanel>
-    </Border>
+                <TextBlock
+                    FontSize="24"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,20"
+                    Text="University Manager Login" />
+
+                <TextBlock Margin="0,0,0,5" Text="Username" />
+                <TextBox Text="{Binding UserName}" Watermark="Enter username" />
+
+                <TextBlock Margin="0,0,0,5" Text="Password" />
+                <TextBox
+                    PasswordChar="*"
+                    Text="{Binding Password}"
+                    Watermark="Enter password" />
+
+                <TextBlock
+                    Foreground="Red"
+                    IsVisible="{Binding IsLoginFailed}"
+                    Text="{Binding ErrorMessage}" />
+
+                <Button
+                    Command="{Binding LoginCommand}"
+                    Content="Login"
+                    HorizontalAlignment="Center"
+                    Padding="20,10" />
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>

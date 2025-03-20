@@ -1,5 +1,5 @@
 <Application
-    RequestedThemeVariant="Default"
+    RequestedThemeVariant="Light"
     x:Class="UniversityManager.App"
     xmlns="https://github.com/avaloniaui"
     xmlns:local="clr-namespace:UniversityManager"

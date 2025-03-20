@@ -27,14 +27,12 @@ public partial class StudentViewModel : BaseViewModel
     private SubjectRepo subjectRepo = SubjectRepo.Instance;
     
     // Student ID - in a real app this would come from authentication
-    private int _studentId = 1;
+    [ObservableProperty]
+    private int _studentId;
 
     public StudentViewModel()
     {
-        Name = "Student";
         
-        EnrolledSubjects = new ObservableCollection<Subject>(subjectRepo.GetEnrolledSubjects(_studentId));
-        AvailableSubjects = new ObservableCollection<Subject>(subjectRepo.GetAvailableSubjects(_studentId));
     }
 
     [RelayCommand]
@@ -71,15 +69,50 @@ public partial class StudentViewModel : BaseViewModel
             EnrolledSelectedSubject = null;
         }
     }
+
+    public void Initialize(string name, int id)
+    {
+        Name = name;
+        StudentId = id;
+        RefreshSubjects();
+    }
     
     private void RefreshSubjects()
     {
         // Get enrolled subjects for this student
         var enrolled = subjectRepo.GetEnrolledSubjects(_studentId);
         EnrolledSubjects = new ObservableCollection<Subject>(enrolled);
+        
+        // First set to null to force property change
+        EnrolledSelectedSubject = null;
+        
+        // Auto-select first enrolled subject if any exist
+        if (enrolled.Any())
+        {
+            EnrolledSelectedSubject = enrolled.First();
+            
+            // Force UI refresh by reassigning the same value
+            var temp = EnrolledSelectedSubject;
+            EnrolledSelectedSubject = null;
+            EnrolledSelectedSubject = temp;
+        }
 
         // Get available subjects for this student
         var available = subjectRepo.GetAvailableSubjects(_studentId);
         AvailableSubjects = new ObservableCollection<Subject>(available);
+        
+        // First set to null to force property change
+        AvailableSelectedSubject = null;
+        
+        // Auto-select first available subject if any exist
+        if (available.Any())
+        {
+            AvailableSelectedSubject = available.First();
+            
+            // Force UI refresh by reassigning the same value
+            var temp = AvailableSelectedSubject;
+            AvailableSelectedSubject = null;
+            AvailableSelectedSubject = temp;
+        }
     }
 }
