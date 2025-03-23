@@ -99,6 +99,16 @@ public class SubjectRepo : ISubjectRepository
         }
     }
 
+    public void UpdateSubject(Subject subject)
+    {
+        var existingSubject = GetSubjectById(subject.Id);
+        if (existingSubject != null)
+        { 
+            existingSubject.Name = subject.Name;
+            existingSubject.Description = subject.Description;
+        }
+    }
+
     public void AddSubject(Subject newSubject)
     {
         subjects.Add(newSubject);

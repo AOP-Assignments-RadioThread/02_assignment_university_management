@@ -13,7 +13,13 @@ public partial class TeacherViewModel : BaseViewModel
 {
     [ObservableProperty]
     private string _name;
-    
+
+    [ObservableProperty] 
+    private bool _isEditing = false;
+
+    [ObservableProperty]
+    private string _editableDescription = string.Empty;
+
     [ObservableProperty]
     private ObservableCollection<Subject> _mySubjects;
     
@@ -53,7 +59,43 @@ public partial class TeacherViewModel : BaseViewModel
             SelectedSubject = MySubjects[0];
         }
     }
-    
+
+    [RelayCommand]
+    public void StartEdit()
+    {
+        if (SelectedSubject != null)
+        {
+            EditableDescription = SelectedSubject.Description;
+            IsEditing = true;
+        }
+    }
+
+    [RelayCommand]
+    public void CancelEdit()
+    {
+        IsEditing = false;
+        EditableDescription = string.Empty;
+    }
+
+    [RelayCommand]
+    public void SaveEdit()
+    {
+        if (SelectedSubject != null && !string.IsNullOrWhiteSpace(EditableDescription))
+        {
+            string subjectName = SelectedSubject.Name;
+            SelectedSubject.Description = EditableDescription;
+            _subjectRepo.UpdateSubject(SelectedSubject);
+            _subjectRepo.SaveSubjects();
+
+            StatusMessage = $"Subject '{subjectName}' updated successfully!";
+            ShowStatusMessage = true;
+            HideStatusMessageAfterDelay();
+
+            IsEditing = false;
+            EditableDescription = string.Empty;
+        }
+    }
+
     [RelayCommand]
     public void CreateSubject()
     {
@@ -70,7 +112,6 @@ public partial class TeacherViewModel : BaseViewModel
             _subjectRepo.AddSubject(newSubject);
             _subjectRepo.SaveSubjects();
             
-            // Show status message
             StatusMessage = $"Subject '{NewSubjectName}' created successfully!";
             ShowStatusMessage = true;
             HideStatusMessageAfterDelay();

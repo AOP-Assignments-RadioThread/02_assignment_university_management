@@ -13,5 +13,6 @@ public interface ISubjectRepository
     void DropSubject(int studentId, int subjectId);
     void AddSubject(Subject newSubject);
     void RemoveSubject(int subjectId);
+    void UpdateSubject(Subject subject);
     void SaveSubjects();
 }
